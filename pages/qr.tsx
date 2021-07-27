@@ -47,7 +47,7 @@ const QR = () => {
     const body = await resp.json();
     setQR(body.results);
   };
-  console.log(QR);
+  // console.log(QR);
   useEffect(() => {
     getQRs();
   }, []);

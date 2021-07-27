@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from "react";
-import useAuth from "../auth/AuthContext";
 import { fetchConToken } from "../helpers/fetch";
 
 const VisitantView = () => {
-  const { user } = useAuth();
   const [referencePoints, setReferencePoints] = useState([]);
   const getReferencePoints = async () => {
     const resp = await fetchConToken("referencePoint");
     const body = await resp.json();
     setReferencePoints(body.results);
   };
-
   useEffect(() => {
     getReferencePoints();
   }, []);
-  console.log(referencePoints);
+
   return (
     <div className="view_container">
       <div className="viewHeader">
         <p>Bases de datos 2021 - 1</p>
-        <p>{user.email} - Visitante</p>
+        <p>Visitante</p>
         <p>Universidad Nacional de Colombia</p>
       </div>
       <div className="content">

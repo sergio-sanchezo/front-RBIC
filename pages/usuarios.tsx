@@ -57,7 +57,7 @@ const Usuarios = () => {
     const body = await resp.json();
     setUsers(body.results);
   };
-  console.log(users);
+  // console.log(users);
   useEffect(() => {
     getUsers();
   }, []);
