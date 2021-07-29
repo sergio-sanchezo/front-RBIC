@@ -2,15 +2,7 @@ import React, { useState } from "react";
 import { EditFilled } from "@ant-design/icons";
 import { Tooltip, Modal } from "antd";
 
-const Update = ({
-  record,
-  endpoint,
-  content,
-}: {
-  record: any;
-  endpoint: any;
-  content: any;
-}) => {
+const Update = ({ content }: { content: any }) => {
   const [showModal, setShowModal] = useState(false);
   const modalState = (state: boolean) => {
     setShowModal(state);

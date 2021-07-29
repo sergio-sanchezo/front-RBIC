@@ -2,7 +2,7 @@ import { Button, Cascader, Form, Input, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { fetchConToken } from "../../helpers/fetch";
 
-const ModalRPS = () => {
+const ModalRPS = ({ getRps }: any) => {
   const [referencePoints, setReferencePoints] = useState([]);
   const onFinish = async (data: any) => {
     // console.log(data);
@@ -10,6 +10,7 @@ const ModalRPS = () => {
     const body = await resp.json();
     if (body.ok) {
       message.success("Creado con éxito");
+      getRps();
     }
   };
   const getData = async () => {
@@ -86,4 +87,4 @@ const ModalRPS = () => {
   );
 };
 
-export default ModalRPS;
+export default React.memo(ModalRPS);

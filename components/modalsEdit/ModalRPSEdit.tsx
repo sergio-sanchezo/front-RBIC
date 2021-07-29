@@ -6,6 +6,12 @@ const ModalRPSEdit = (record: any) => {
   const id = record.record.rps_id;
   const [referencePoints, setReferencePoints] = useState([]);
   const onFinish = async (data: any) => {
+    const isNull = Object.values(data).every(
+      (o) => o === null || o === undefined
+    );
+    if (isNull) {
+      return message.info("No se ha introducido información");
+    }
     if (data.rps_referencePoint) {
       data.referencePoint = data.rps_referencePoint[0];
     }
@@ -58,4 +64,4 @@ const ModalRPSEdit = (record: any) => {
   );
 };
 
-export default ModalRPSEdit;
+export default React.memo(ModalRPSEdit);

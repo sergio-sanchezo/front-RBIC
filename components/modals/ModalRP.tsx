@@ -1,16 +1,30 @@
-import { Button, DatePicker, Form, Input, message } from "antd";
-import React from "react";
+import { Button, Cascader, DatePicker, Form, Input, message } from "antd";
+import React, { useEffect, useState } from "react";
 import { fetchConToken } from "../../helpers/fetch";
 
-const ModalRP = () => {
+const ModalRP = ({ getRp }: any) => {
+  const [culturalWells, setCulturalwells] = useState([]);
   const onFinish = async (data: any) => {
     data.createdDate = data.createdDate.format("YYYY-MM-DD");
     const resp = await fetchConToken("referencePoint", data, "POST");
     const body = await resp.json();
     if (body.ok) {
       message.success("Creado con éxito");
+      getRp();
     }
   };
+  const getData = async () => {
+    const resp = await fetchConToken("culturalWell");
+    const body = await resp.json();
+    const cascaderOptions = body.results.map((e: any) => {
+      return { value: e.ctw_id, label: e.ctw_name };
+    });
+    setCulturalwells(cascaderOptions);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <Form onFinish={onFinish}>
       <h2>Crear punto de referencia</h2>
@@ -74,6 +88,21 @@ const ModalRP = () => {
       >
         <Input />
       </Form.Item>
+      <span>Bien de interés cultural:</span>
+      <Form.Item
+        name="culturalWell"
+        rules={[
+          {
+            required: true,
+            message: "Por favor selecciona un bien de interés cultural",
+          },
+        ]}
+      >
+        <Cascader
+          options={culturalWells}
+          placeholder="Bien de interés cultural"
+        />
+      </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Crear
@@ -83,4 +112,4 @@ const ModalRP = () => {
   );
 };
 
-export default ModalRP;
+export default React.memo(ModalRP);

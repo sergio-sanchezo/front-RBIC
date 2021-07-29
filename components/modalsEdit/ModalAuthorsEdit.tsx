@@ -6,8 +6,11 @@ const ModalAuthorsEdit = (record: any) => {
   const id = record.record.aut_id;
   const [referencePoints, setReferencePoints] = useState([]);
   const onFinish = async (data: any) => {
-    if (data.aut_referencePoint) {
-      data.referencePoint = data.aut_referencePoint[0];
+    const isNull = Object.values(data).every(
+      (o) => o === null || o === undefined
+    );
+    if (isNull) {
+      return message.info("No se ha introducido información");
     }
     data.id = id;
     const resp = await fetchConToken("author", data, "PUT");
@@ -19,14 +22,16 @@ const ModalAuthorsEdit = (record: any) => {
   const getData = async () => {
     const resp = await fetchConToken("referencePoint");
     const body = await resp.json();
-    const cascaderOpt = body.results.map((e: any) => {
+    const cascaderOptions = body.results.map((e: any) => {
       return { value: e.rfp_id, label: e.rfp_name };
     });
-    setReferencePoints(cascaderOpt);
+    setReferencePoints(cascaderOptions);
   };
+
   useEffect(() => {
     getData();
   }, []);
+
   return (
     <Form onFinish={onFinish}>
       <h2>Editar autor</h2>
@@ -40,10 +45,7 @@ const ModalAuthorsEdit = (record: any) => {
       </Form.Item>
       <span>Punto de referencia:</span>
       <Form.Item name="aut_referencePoint">
-        <Cascader
-          options={referencePoints}
-          placeholder="Puntos de referencia"
-        />
+        <Cascader options={referencePoints} placeholder="Punto de referencia" />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
@@ -54,4 +56,4 @@ const ModalAuthorsEdit = (record: any) => {
   );
 };
 
-export default ModalAuthorsEdit;
+export default React.memo(ModalAuthorsEdit);

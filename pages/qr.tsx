@@ -10,11 +10,6 @@ import { fetchConToken } from "../helpers/fetch";
 
 const columns = [
   {
-    title: "ID",
-    dataIndex: "qr_id",
-    key: "qr_id",
-  },
-  {
     title: "Imagen",
     dataIndex: "qr_image",
     key: "qr_image",
@@ -29,11 +24,7 @@ const columns = [
     key: "action",
     render: (_: any, record: any) => (
       <>
-        <Update
-          record={record}
-          endpoint="qr"
-          content={<ModalQREdit record={record} />}
-        />
+        <Update content={<ModalQREdit record={record} />} />
         <Delete record={record} endpoint="qr" />
       </>
     ),
@@ -43,7 +34,7 @@ const columns = [
 const QR = () => {
   const [QR, setQR] = useState([]);
   const getQRs = async () => {
-    const resp = await fetchConToken("qr");
+    const resp = await fetchConToken("qr/view");
     const body = await resp.json();
     setQR(body.results);
   };
@@ -55,8 +46,12 @@ const QR = () => {
     <MainLayout title="QR" selectedKey={["5"]}>
       <>
         <h1 className="main-title">QR</h1>
-        <Create text="QR" endpoint="qr" content={<ModalQR />} />
-        <Table dataSource={QR} columns={columns} />
+        <Create text="QR" endpoint="qr" content={<ModalQR getQRs={getQRs} />} />
+        <Table
+          dataSource={QR}
+          columns={columns}
+          pagination={{ defaultPageSize: 4 }}
+        />
       </>
     </MainLayout>
   );

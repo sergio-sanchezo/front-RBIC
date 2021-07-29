@@ -1,10 +1,17 @@
-import { Button, DatePicker, Form, Input, message } from "antd";
-import React from "react";
+import { Button, Cascader, DatePicker, Form, Input, message } from "antd";
+import React, { useEffect, useState } from "react";
 import { fetchConToken } from "../../helpers/fetch";
 
 const ModalRPEdit = (record: any) => {
+  const [culturalWells, setCulturalwells] = useState([]);
   const id = record.record.rfp_id;
   const onFinish = async (data: any) => {
+    const isNull = Object.values(data).every(
+      (o) => o === null || o === undefined
+    );
+    if (isNull) {
+      return message.info("No se ha introducido información");
+    }
     if (data.createdDate) {
       data.createdDate = data.createdDate.format("YYYY-MM-DD");
     }
@@ -15,6 +22,18 @@ const ModalRPEdit = (record: any) => {
       message.success("Editado con éxito");
     }
   };
+  const getData = async () => {
+    const resp = await fetchConToken("culturalWell");
+    const body = await resp.json();
+    const cascaderOptions = body.results.map((e: any) => {
+      return { value: e.ctw_id, label: e.ctw_name };
+    });
+    setCulturalwells(cascaderOptions);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <Form onFinish={onFinish}>
       <h2>Editar punto de referencia</h2>
@@ -38,6 +57,13 @@ const ModalRPEdit = (record: any) => {
       <Form.Item name="rfp_summary">
         <Input />
       </Form.Item>
+      <span>Bien de interés cultural:</span>
+      <Form.Item name="rfp_culturalWell">
+        <Cascader
+          options={culturalWells}
+          placeholder="Bien de interés cultural"
+        />
+      </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Editar
@@ -47,4 +73,4 @@ const ModalRPEdit = (record: any) => {
   );
 };
 
-export default ModalRPEdit;
+export default React.memo(ModalRPEdit);

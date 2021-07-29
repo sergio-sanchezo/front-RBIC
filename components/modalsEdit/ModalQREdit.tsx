@@ -6,6 +6,12 @@ const ModalQREdit = (record: any) => {
   const id = record.record.qr_id;
   const [culturalWells, setCulturalWells] = useState([]);
   const onFinish = async (data: any) => {
+    const isNull = Object.values(data).every(
+      (o) => o === null || o === undefined
+    );
+    if (isNull) {
+      return message.info("No se ha introducido información");
+    }
     if (data.qr_culturalWell) {
       data.culturalWell = data.qr_culturalWell[0];
     }
@@ -50,4 +56,4 @@ const ModalQREdit = (record: any) => {
   );
 };
 
-export default ModalQREdit;
+export default React.memo(ModalQREdit);

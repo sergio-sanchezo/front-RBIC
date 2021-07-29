@@ -16,7 +16,12 @@ const optionsCascader = [
 const ModalUsersEdit = (record: any) => {
   const id = record.record.usr_document;
   const onFinish = async (data: any) => {
-    // console.log(record);
+    const isNull = Object.values(data).every(
+      (o) => o === null || o === undefined
+    );
+    if (isNull) {
+      return message.info("No se ha introducido información");
+    }
     if (data.usr_role) {
       data.usr_role = data.usr_role[0];
     }
@@ -67,4 +72,4 @@ const ModalUsersEdit = (record: any) => {
   );
 };
 
-export default ModalUsersEdit;
+export default React.memo(ModalUsersEdit);

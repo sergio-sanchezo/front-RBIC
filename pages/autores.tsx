@@ -29,11 +29,7 @@ const columns = [
     key: "action",
     render: (_: any, record: any) => (
       <>
-        <Update
-          record={record}
-          endpoint="author"
-          content={<ModalAuthorsEdit record={record} />}
-        />
+        <Update content={<ModalAuthorsEdit record={record} />} />
         <Delete record={record} endpoint="author" />
       </>
     ),
@@ -43,11 +39,10 @@ const columns = [
 const Authors = () => {
   const [authors, setAuthors] = useState([]);
   const getAuthors = async () => {
-    const resp = await fetchConToken("author");
+    const resp = await fetchConToken("author/view");
     const body = await resp.json();
     setAuthors(body.results);
   };
-
   useEffect(() => {
     getAuthors();
   }, []);
@@ -55,8 +50,16 @@ const Authors = () => {
     <MainLayout title="Autores" selectedKey={["6"]}>
       <>
         <h1 className="main-title">Autores</h1>
-        <Create text="autor" endpoint="author" content={<ModalAuthors />} />
-        <Table dataSource={authors} columns={columns} />
+        <Create
+          text="autor"
+          endpoint="author"
+          content={<ModalAuthors getAuts={getAuthors} />}
+        />
+        <Table
+          dataSource={authors}
+          columns={columns}
+          pagination={{ defaultPageSize: 4 }}
+        />
       </>
     </MainLayout>
   );

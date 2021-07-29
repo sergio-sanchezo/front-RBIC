@@ -1,6 +1,5 @@
 .layoutContainer {
   .siderContainer {
-    height: 100vh;
     .logo {
       height: 32px;
       margin: 16px;
@@ -12,10 +11,22 @@
       color: #fff;
       display: flex;
       justify-content: flex-end;
-    }
-    .contentContainer {
-      overflow-x: hidden;
-      overflow-y: visible;
+      align-items: center;
+      .ant-btn-primary {
+        background: none;
+        background-color: none;
+        border: none;
+        border-radius: 3rem;
+        overflow: hidden;
+        transition: 0.1s;
+        &:hover {
+          background: none;
+          border: none;
+          background-color: #188fffdc;
+          color: #fff;
+          will-change: transform;
+        }
+      }
     }
   }
 }

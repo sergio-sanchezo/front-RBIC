@@ -6,8 +6,13 @@ import { fetchConToken } from "../../helpers/fetch";
 
 const ModalCulturalWellsEdit = (record: any) => {
   const id = record.record.ctw_id;
-  const [referencePoints, setReferencePoints] = useState([]);
   const onFinish = async (data: any) => {
+    const isNull = Object.values(data).every(
+      (o) => o === null || o === undefined
+    );
+    if (isNull) {
+      return message.info("No se ha introducido información");
+    }
     if (data.createdDate) {
       data.createdDate = data.createdDate.format("YYYY-MM-DD");
     }
@@ -21,17 +26,7 @@ const ModalCulturalWellsEdit = (record: any) => {
       message.success("Editado con éxito");
     }
   };
-  const getData = async () => {
-    const resp = await fetchConToken("referencePoint");
-    const body = await resp.json();
-    const cascaderOpt = body.results.map((e: any) => {
-      return { value: e.rfp_id, label: e.rfp_name };
-    });
-    setReferencePoints(cascaderOpt);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
+
   return (
     <Form onFinish={onFinish}>
       <h2>Editar bien de interés cultural</h2>
@@ -63,13 +58,7 @@ const ModalCulturalWellsEdit = (record: any) => {
       <Form.Item name="ctw_website">
         <Input />
       </Form.Item>
-      <span>Punto de referencia:</span>
-      <Form.Item name="ctw_referencePoint">
-        <Cascader
-          options={referencePoints}
-          placeholder="Puntos de referencia"
-        />
-      </Form.Item>
+
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Editar
@@ -79,4 +68,4 @@ const ModalCulturalWellsEdit = (record: any) => {
   );
 };
 
-export default ModalCulturalWellsEdit;
+export default React.memo(ModalCulturalWellsEdit);

@@ -1,12 +1,14 @@
 import { Button, Form, Input } from "antd";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React from "react";
 import useAuth from "../auth/AuthContext";
+import { fetchSinToken } from "../helpers/fetch";
 
 const login = () => {
-  const { login } = useAuth();
+  const { startLogin } = useAuth();
+
   const onFinish = async (data: any) => {
-    login(data.email, data.password);
+    startLogin(data.email, data.password);
   };
   return (
     <div className="loginContainer">

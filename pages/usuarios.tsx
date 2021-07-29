@@ -39,11 +39,7 @@ const columns = [
     key: "action",
     render: (_: any, record: any) => (
       <>
-        <Update
-          record={record}
-          endpoint="user"
-          content={<ModalUsersEdit record={record} />}
-        />
+        <Update content={<ModalUsersEdit record={record} />} />
         <Delete record={record} endpoint="user" />
       </>
     ),
@@ -66,8 +62,16 @@ const Usuarios = () => {
     <MainLayout title="Usuarios" selectedKey={["4"]}>
       <>
         <h1 className="main-title">Usuarios</h1>
-        <Create text="usuario" endpoint="user" content={<ModalUsers />} />
-        <Table dataSource={users} columns={columns} />
+        <Create
+          text="usuario"
+          endpoint="user"
+          content={<ModalUsers getUsr={getUsers} />}
+        />
+        <Table
+          dataSource={users}
+          columns={columns}
+          pagination={{ defaultPageSize: 4 }}
+        />
       </>
     </MainLayout>
   );

@@ -2,26 +2,29 @@ import { Button, Cascader, Form, Input, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { fetchConToken } from "../../helpers/fetch";
 
-const ModalAuthors = () => {
+const ModalAuthors = ({ getAuts }: any) => {
   const [referencePoints, setReferencePoints] = useState([]);
   const onFinish = async (data: any) => {
     const resp = await fetchConToken("author", data, "POST");
     const body = await resp.json();
     if (body.ok) {
       message.success("Creado con éxito");
+      getAuts();
     }
   };
   const getData = async () => {
     const resp = await fetchConToken("referencePoint");
     const body = await resp.json();
-    const cascaderOpt = body.results.map((e: any) => {
+    const cascaderOptions = body.results.map((e: any) => {
       return { value: e.rfp_id, label: e.rfp_name };
     });
-    setReferencePoints(cascaderOpt);
+    setReferencePoints(cascaderOptions);
   };
+
   useEffect(() => {
     getData();
   }, []);
+  console.log(referencePoints);
   return (
     <Form onFinish={onFinish}>
       <h2>Crear autor</h2>
@@ -59,10 +62,7 @@ const ModalAuthors = () => {
           },
         ]}
       >
-        <Cascader
-          options={referencePoints}
-          placeholder="Puntos de referencia"
-        />
+        <Cascader options={referencePoints} placeholder="Punto de referencia" />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
@@ -73,4 +73,4 @@ const ModalAuthors = () => {
   );
 };
 
-export default ModalAuthors;
+export default React.memo(ModalAuthors);

@@ -1,31 +1,25 @@
-import router from "next/router";
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { fetchConToken, fetchSinToken } from "../helpers/fetch";
+import { useRouter } from "next/router";
 
 const AuthContext = createContext({} as any);
 
 export const AuthContextProvider = (props: any) => {
+  const router = useRouter();
   const { children } = props;
-  const [user, setUser] = useState({} as any);
-  const [authenticated, setAuthenticated] = useState<boolean>();
+  const [session, setSession] = useState({});
+  const [authenticated, setAuthenticated] = useState(false);
 
-  const login = async (email: any, password: any) => {
+  const startLogin = async (email: any, password: any) => {
     const resp = await fetchSinToken("auth", { email, password }, "POST");
     const body = await resp.json();
-
     if (body.ok) {
       const actualDate: string = new Date().getTime() as any;
       localStorage.setItem("token", body.token);
       localStorage.setItem("token-init-date", actualDate);
-      setUser(body);
+      setSession(body);
       setAuthenticated(true);
-      if (body.role === "admin") {
-        router.push("/punto_de_referencia");
-      } else if (body.role === "visitante") {
-        router.push("/visitantView");
-      }
-    } else {
-      setUser(body);
+      router.push("/bien_de_interes");
     }
   };
 
@@ -36,14 +30,26 @@ export const AuthContextProvider = (props: any) => {
       const actualDate: string = new Date().getTime() as any;
       localStorage.setItem("token", body.token);
       localStorage.setItem("token-init-date", actualDate);
+      setSession(body);
       setAuthenticated(true);
+      router.push("/bien_de_interes");
     }
-    setUser(body);
   };
 
+  const logout = async () => {
+    localStorage.clear();
+    router.push("login");
+  };
   return (
     <AuthContext.Provider
-      value={{ user, login, authenticated, startChecking, setUser }}
+      value={{
+        session,
+        authenticated,
+        setAuthenticated,
+        startLogin,
+        startChecking,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

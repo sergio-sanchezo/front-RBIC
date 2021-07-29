@@ -4,27 +4,17 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { fetchConToken } from "../../helpers/fetch";
 
-const ModalCulturalWells = () => {
-  const [referencePoints, setReferencePoints] = useState([]);
+const ModalCulturalWells = ({ getCw }: any) => {
   const onFinish = async (data: any) => {
     data.createdDate = data.createdDate.format("YYYY-MM-DD");
     const resp = await fetchConToken("culturalWell", data, "POST");
     const body = await resp.json();
     if (body.ok) {
       message.success("Creado con éxito");
+      getCw();
     }
   };
-  const getData = async () => {
-    const resp = await fetchConToken("referencePoint");
-    const body = await resp.json();
-    const cascaderOpt = body.results.map((e: any) => {
-      return { value: e.rfp_id, label: e.rfp_name };
-    });
-    setReferencePoints(cascaderOpt);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
+
   return (
     <Form onFinish={onFinish}>
       <h2>Crear bien de interés cultural</h2>
@@ -112,21 +102,6 @@ const ModalCulturalWells = () => {
       >
         <Input />
       </Form.Item>
-      <span>Punto de referencia:</span>
-      <Form.Item
-        name="referencePoint"
-        rules={[
-          {
-            required: true,
-            message: "Por favor selecciona un punto de referencia",
-          },
-        ]}
-      >
-        <Cascader
-          options={referencePoints}
-          placeholder="Puntos de referencia"
-        />
-      </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Crear
@@ -136,4 +111,4 @@ const ModalCulturalWells = () => {
   );
 };
 
-export default ModalCulturalWells;
+export default React.memo(ModalCulturalWells);

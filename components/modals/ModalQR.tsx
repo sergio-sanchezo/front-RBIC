@@ -1,14 +1,16 @@
-import { Button, Cascader, Form, Input, message } from "antd";
+import { Button, Cascader, Form, Input, message, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { fetchConToken } from "../../helpers/fetch";
 
-const ModalQR = () => {
+const ModalQR = ({ getQRs }: any) => {
   const [culturalWells, setCulturalWells] = useState([]);
   const onFinish = async (data: any) => {
     const resp = await fetchConToken("qr", data, "POST");
     const body = await resp.json();
     if (body.ok) {
       message.success("Creado con éxito");
+      getQRs();
     }
   };
   const getData = async () => {
@@ -62,4 +64,4 @@ const ModalQR = () => {
   );
 };
 
-export default ModalQR;
+export default React.memo(ModalQR);

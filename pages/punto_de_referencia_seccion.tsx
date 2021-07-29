@@ -34,11 +34,7 @@ const columns = [
     key: "action",
     render: (_: any, record: any) => (
       <>
-        <Update
-          record={record}
-          endpoint="referencePointSection"
-          content={<ModalRPSEdit record={record} />}
-        />
+        <Update content={<ModalRPSEdit record={record} />} />
         <Delete record={record} endpoint="referencePointSection" />
       </>
     ),
@@ -48,7 +44,7 @@ const columns = [
 const PuntoDeReferenciaSeccion = () => {
   const [referencePointSection, setReferencePointSection] = useState([]);
   const getRps = async () => {
-    const resp = await fetchConToken("referencePointSection");
+    const resp = await fetchConToken("referencePointSection/view");
     const body = await resp.json();
     setReferencePointSection(body.results);
   };
@@ -63,9 +59,13 @@ const PuntoDeReferenciaSeccion = () => {
         <Create
           text="punto de referencia sección"
           endpoint="referencePointSection"
-          content={<ModalRPS />}
+          content={<ModalRPS getRps={getRps} />}
         />
-        <Table dataSource={referencePointSection} columns={columns} />
+        <Table
+          dataSource={referencePointSection}
+          columns={columns}
+          pagination={{ defaultPageSize: 4 }}
+        />
       </>
     </MainLayout>
   );

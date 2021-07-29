@@ -13,12 +13,13 @@ const optionsCascader = [
   },
 ];
 
-const ModalUsers = () => {
+const ModalUsers = ({ getUsr }: any) => {
   const onFinish = async (data: any) => {
     const resp = await fetchConToken("user", data, "POST");
     const body = await resp.json();
     if (body.ok) {
       message.success("Creado con éxito");
+      getUsr();
     }
   };
   return (
@@ -106,4 +107,4 @@ const ModalUsers = () => {
   );
 };
 
-export default ModalUsers;
+export default React.memo(ModalUsers);

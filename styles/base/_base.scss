@@ -5,7 +5,12 @@
 
 .main-title {
   font-weight: bold;
-  font-size: 2.3em;
+  font-size: 2.4em;
+}
+
+.sub-title {
+  font-weight: bold;
+  font-size: 2.1em;
 }
 
 .action-btn {
@@ -16,6 +21,30 @@
   }
 }
 
+.mt-35 {
+  margin-top: 35px;
+}
+
 .btn-create {
   margin: 10px 0px;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  -moz-box-shadow: inset 0 0 5px #00000068;
+  -webkit-box-shadow: inset 0 0 5px #00000068;
+  box-shadow: inset 0 0 5px #00000068;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(172, 172, 172);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(160, 160, 160);
 }

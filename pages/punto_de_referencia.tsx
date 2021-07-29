@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Pagination, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import Create from "../components/crud/Create";
 import Delete from "../components/crud/Delete";
@@ -9,11 +9,6 @@ import ModalRPEdit from "../components/modalsEdit/ModalRPEdit";
 import { fetchConToken } from "../helpers/fetch";
 
 const columns = [
-  {
-    title: "ID",
-    dataIndex: "rfp_id",
-    key: "rfp_id",
-  },
   {
     title: "Nombre",
     dataIndex: "rfp_name",
@@ -40,15 +35,16 @@ const columns = [
     key: "rfp_summary",
   },
   {
+    title: "Bien de interés cultural",
+    dataIndex: "rfp_culturalWell",
+    key: "rfp_culturalWell",
+  },
+  {
     title: "Acciones",
     key: "action",
     render: (_: any, record: any) => (
       <>
-        <Update
-          record={record}
-          endpoint="referencePoint"
-          content={<ModalRPEdit record={record} />}
-        />
+        <Update content={<ModalRPEdit record={record} />} />
         <Delete record={record} endpoint="referencePoint" />
       </>
     ),
@@ -57,26 +53,46 @@ const columns = [
 
 const PuntoDeReferencia = () => {
   const [referencePoint, setReferencePoint] = useState([]);
+  const [amountRP, setAmountRP] = useState<number>();
   const getRp = async () => {
-    const resp = await fetchConToken("referencePoint");
+    const resp = await fetchConToken("referencePoint/view");
     const body = await resp.json();
 
     setReferencePoint(body.results);
   };
 
+  const getAmountRp = async () => {
+    const resp = await fetchConToken("referencePoint/total");
+    const body = await resp.json();
+    setAmountRP(body.amount);
+  };
+
   useEffect(() => {
     getRp();
+    getAmountRp();
   }, []);
   return (
-    <MainLayout title="Punto de Referencia" selectedKey={["1"]}>
+    <MainLayout title="Punto de Referencia" selectedKey={["2"]}>
       <>
         <h1 className="main-title">Punto de Referencia</h1>
         <Create
           text="punto de referencia"
           endpoint="referencePoint"
-          content={<ModalRP />}
+          content={<ModalRP getRp={getRp} />}
         />
-        <Table dataSource={referencePoint} columns={columns} />
+        <Table
+          dataSource={referencePoint}
+          columns={columns}
+          pagination={{ defaultPageSize: 4 }}
+        />
+        {amountRP && (
+          <>
+            <h2 className="sub-title">Información - Total</h2>
+            <div className="extraInfo">
+              <p className="text-rp">Total puntos de referencia: {amountRP}</p>
+            </div>
+          </>
+        )}
       </>
     </MainLayout>
   );

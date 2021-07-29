@@ -46,20 +46,11 @@ const columns = [
     key: "ctw_webSite",
   },
   {
-    title: "Punto de referencia",
-    dataIndex: "ctw_referencePoint",
-    key: "ctw_referencePoint",
-  },
-  {
     title: "Acciones",
     key: "action",
     render: (_: any, record: any) => (
       <>
-        <Update
-          record={record}
-          endpoint="culturalWell"
-          content={<ModalCulturalWellsEdit record={record} />}
-        />
+        <Update content={<ModalCulturalWellsEdit record={record} />} />
         <Delete record={record} endpoint="culturalWell" />
       </>
     ),
@@ -68,26 +59,85 @@ const columns = [
 
 const BienDeInteres = () => {
   const [culturalWells, setCulturalWells] = useState([]);
+  const [extraRp, setExtraRp] = useState([]);
+  const [extraQR, setExtraQR] = useState([]);
   const getCulturalWells = async () => {
     const resp = await fetchConToken("culturalWell");
     const body = await resp.json();
     setCulturalWells(body.results);
   };
-  // console.log(culturalWells);
+  const getExtraInfoRp = async () => {
+    const resp = await fetchConToken("culturalWell/groupedRp");
+    const body = await resp.json();
+    setExtraRp(body.results);
+  };
+
+  const getExtraInfoQR = async () => {
+    const resp = await fetchConToken("culturalWell/groupedQR");
+    const body = await resp.json();
+    setExtraQR(body.results);
+  };
   useEffect(() => {
     getCulturalWells();
+    getExtraInfoRp();
+    getExtraInfoQR();
   }, []);
-
   return (
-    <MainLayout title="Bien de interés cultural" selectedKey={["2"]}>
+    <MainLayout title="Bien de interés cultural" selectedKey={["1"]}>
       <>
         <h1 className="main-title">Bien de interés cultural</h1>
         <Create
           text="bien de interés cultural"
           endpoint="culturalWell"
-          content={<ModalCulturalWells />}
+          content={<ModalCulturalWells getCw={getCulturalWells} />}
         />
-        <Table dataSource={culturalWells} columns={columns} />
+        <Table
+          dataSource={culturalWells}
+          columns={columns}
+          pagination={{ defaultPageSize: 4 }}
+        />
+        {extraRp.length > 0 && (
+          <>
+            <h2 className="sub-title">Información - Puntos de referencia</h2>
+            <div className="extraInfo">
+              <p className="text">
+                Cantidad de puntos de referencia por bien de interés cultural
+              </p>
+              <div className="extraInfo__container">
+                <p className="extra-title one">Bien de interés cultural</p>
+                <p className="extra-title two">
+                  Cantidad de puntos de referencia
+                </p>
+                {extraRp.map((e: any, i: any) => (
+                  <>
+                    <p className="one">{e.ctw}</p>
+                    <p className="two">{e.amount}</p>
+                  </>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+        {extraQR.length > 0 && (
+          <>
+            <h2 className="sub-title mt-35">Información - QR</h2>
+            <div className="extraInfo">
+              <p className="text">
+                Cantidad de códigos QR por bien de interés cultural
+              </p>
+              <div className="extraInfo__container">
+                <p className="extra-title one">Bien de interés cultural</p>
+                <p className="extra-title two">Cantidad de códigos QR</p>
+                {extraQR.map((e: any, i: any) => (
+                  <>
+                    <p className="one">{e.ctw}</p>
+                    <p className="two">{e.amount}</p>
+                  </>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </>
     </MainLayout>
   );

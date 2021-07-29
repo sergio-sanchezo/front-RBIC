@@ -1,9 +1,5 @@
-import {
-  QrcodeOutlined,
-  UnorderedListOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { QrcodeOutlined, UserOutlined } from "@ant-design/icons";
+import { Layout, Menu, Dropdown, Button } from "antd";
 import Link from "next/link";
 import React from "react";
 import useAuth from "../../auth/AuthContext";
@@ -15,17 +11,17 @@ const { Header, Content, Sider } = Layout;
 
 const MainLayout = (props: LayoutProps) => {
   const { children, title, selectedKey } = props;
-  const { user } = useAuth();
+  const { logout } = useAuth();
   const layoutObj: LayoutOptions[] = [
-    {
-      path: "/punto_de_referencia",
-      title: "Punto de referencia",
-      icon: <Art />,
-    },
     {
       path: "/bien_de_interes",
       title: "Bien de interés cultural",
       icon: <Museum />,
+    },
+    {
+      path: "/punto_de_referencia",
+      title: "Punto de referencia",
+      icon: <Art />,
     },
     {
       path: "/punto_de_referencia_seccion",
@@ -51,7 +47,7 @@ const MainLayout = (props: LayoutProps) => {
 
   return (
     <Main title={title}>
-      <Layout className="layoutContainer">
+      <Layout className="layoutContainer" style={{ minHeight: "100vh" }}>
         <Sider className="siderContainer">
           <div className="logo" />
           <Menu mode="inline" theme="dark" defaultSelectedKeys={selectedKey}>
@@ -65,7 +61,11 @@ const MainLayout = (props: LayoutProps) => {
           </Menu>
         </Sider>
         <Layout className="siteLayout">
-          <Header className="headerContainer">{user.email}</Header>
+          <Header className="headerContainer">
+            <Button type="primary" onClick={logout}>
+              Salir
+            </Button>
+          </Header>
           <Content className="contentContainer" style={{ margin: "40px 16px" }}>
             {children}
           </Content>
