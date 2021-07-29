@@ -1,8 +1,6 @@
 import { Button, Form, Input } from "antd";
-import { useRouter } from "next/router";
 import React from "react";
 import useAuth from "../auth/AuthContext";
-import { fetchSinToken } from "../helpers/fetch";
 
 const login = () => {
   const { startLogin } = useAuth();
@@ -31,7 +29,7 @@ const login = () => {
         <Form.Item
           name="password"
           rules={[
-            { required: true, message: "Por favor introduce tu contraseña!" },
+            { required: true, message: "Por favor introduce tu contraseña" },
           ]}
         >
           <Input.Password />

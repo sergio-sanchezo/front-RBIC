@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { fetchConToken, fetchSinToken } from "../helpers/fetch";
 import { useRouter } from "next/router";
+import { message } from "antd";
 
 const AuthContext = createContext({} as any);
 
@@ -20,6 +21,8 @@ export const AuthContextProvider = (props: any) => {
       setSession(body);
       setAuthenticated(true);
       router.push("/bien_de_interes");
+    } else {
+      message.error("Contraseña o correo incorrectos");
     }
   };
 
