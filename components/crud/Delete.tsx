@@ -10,7 +10,6 @@ interface DeleteProps {
 
 const Delete = ({ record, endpoint }: DeleteProps) => {
   const onDelete = async (record: any, endpoint: any) => {
-    console.log(record);
     const resp = await fetchConToken(endpoint, record, "DELETE");
     const body = await resp.json();
     if (body.ok) {

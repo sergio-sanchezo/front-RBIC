@@ -7,7 +7,6 @@ const Update = ({ content }: { content: any }) => {
   const modalState = (state: boolean) => {
     setShowModal(state);
   };
-  // console.log(record);
   return (
     <>
       <Tooltip placement="top" title="Editar">

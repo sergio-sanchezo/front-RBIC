@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Image, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import Create from "../components/crud/Create";
 import Delete from "../components/crud/Delete";
@@ -18,6 +18,9 @@ const columns = [
     title: "Imagen - Link",
     dataIndex: "rps_image",
     key: "rps_image",
+    render: (_: any, image: any) => (
+      <Image src={image.rps_image} width={150} alt={image.rps_image} />
+    ),
   },
   {
     title: "Descripción",

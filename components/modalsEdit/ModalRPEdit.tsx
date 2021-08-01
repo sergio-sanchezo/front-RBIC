@@ -7,7 +7,7 @@ const ModalRPEdit = (record: any) => {
   const id = record.record.rfp_id;
   const onFinish = async (data: any) => {
     const isNull = Object.values(data).every(
-      (o) => o === null || o === undefined
+      (o) => o === null || o === undefined || o === ""
     );
     if (isNull) {
       return message.info("No se ha introducido información");

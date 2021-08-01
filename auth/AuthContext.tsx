@@ -10,17 +10,24 @@ export const AuthContextProvider = (props: any) => {
   const { children } = props;
   const [session, setSession] = useState({});
   const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const startLogin = async (email: any, password: any) => {
     const resp = await fetchSinToken("auth", { email, password }, "POST");
     const body = await resp.json();
     if (body.ok) {
-      const actualDate: string = new Date().getTime() as any;
-      localStorage.setItem("token", body.token);
-      localStorage.setItem("token-init-date", actualDate);
-      setSession(body);
-      setAuthenticated(true);
-      router.push("/bien_de_interes");
+      if (body.role === "visitante") {
+        message.warning("No tienes permisos para acceder");
+        setAuthenticated(false);
+      } else {
+        const actualDate: string = new Date().getTime() as any;
+        localStorage.setItem("token", body.token);
+        localStorage.setItem("token-init-date", actualDate);
+        setSession(body);
+        setAuthenticated(true);
+        setLoading(false);
+        router.push("/bien_de_interes");
+      }
     } else {
       message.error("Contraseña o correo incorrectos");
     }
@@ -30,18 +37,24 @@ export const AuthContextProvider = (props: any) => {
     const resp = await fetchConToken("auth/renew");
     const body = await resp.json();
     if (body.ok) {
+      if (body.data.usr_role === "visitante" || body.role == "visitante") {
+        console.log(body);
+        setAuthenticated(false);
+        router.push("/login");
+      }
       const actualDate: string = new Date().getTime() as any;
       localStorage.setItem("token", body.token);
       localStorage.setItem("token-init-date", actualDate);
       setSession(body);
       setAuthenticated(true);
+      setLoading(false);
       router.push("/bien_de_interes");
     }
   };
 
   const logout = async () => {
     localStorage.clear();
-    router.push("login");
+    router.push("/login");
   };
   return (
     <AuthContext.Provider
@@ -52,6 +65,8 @@ export const AuthContextProvider = (props: any) => {
         startLogin,
         startChecking,
         logout,
+        loading,
+        setLoading,
       }}
     >
       {children}

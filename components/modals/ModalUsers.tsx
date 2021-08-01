@@ -96,7 +96,7 @@ const ModalUsers = ({ getUsr }: any) => {
           },
         ]}
       >
-        <InputNumber style={{ width: "100%" }} />
+        <InputNumber style={{ width: "100%" }} max={9999999999} />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">

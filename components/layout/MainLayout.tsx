@@ -1,4 +1,8 @@
-import { QrcodeOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  LineChartOutlined,
+  QrcodeOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Layout, Menu, Dropdown, Button } from "antd";
 import Link from "next/link";
 import React from "react";
@@ -42,6 +46,11 @@ const MainLayout = (props: LayoutProps) => {
       path: "/autores",
       title: "Autores",
       icon: <Editor />,
+    },
+    {
+      path: "/visitas",
+      title: "Visitas",
+      icon: <LineChartOutlined />,
     },
   ];
 
