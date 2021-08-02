@@ -85,14 +85,6 @@ const PuntoDeReferencia = () => {
           columns={columns}
           pagination={{ defaultPageSize: 4 }}
         />
-        {amountRP && (
-          <>
-            <h2 className="sub-title">Información - Total</h2>
-            <div className="extraInfo">
-              <p className="text-rp">Total puntos de referencia: {amountRP}</p>
-            </div>
-          </>
-        )}
       </>
     </MainLayout>
   );
