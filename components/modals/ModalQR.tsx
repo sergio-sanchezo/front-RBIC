@@ -1,5 +1,4 @@
-import { Button, Cascader, Form, Input, message, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Button, Cascader, Form, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { fetchConToken } from "../../helpers/fetch";
 
@@ -27,19 +26,7 @@ const ModalQR = ({ getQRs }: any) => {
   }, []);
   return (
     <Form onFinish={onFinish}>
-      <h2>Crear QR</h2>
-      <span>Imagen:</span>
-      <Form.Item
-        name="image"
-        rules={[
-          {
-            required: true,
-            message: "Por favor introduce un link",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+      <h2>Generar QR</h2>
       <span>Bien de interés cultural:</span>
       <Form.Item
         name="culturalWell"
@@ -57,7 +44,7 @@ const ModalQR = ({ getQRs }: any) => {
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Crear
+          Generar
         </Button>
       </Form.Item>
     </Form>

@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Image, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import Create from "../components/crud/Create";
 import Delete from "../components/crud/Delete";
@@ -10,9 +10,12 @@ import { fetchConToken } from "../helpers/fetch";
 
 const columns = [
   {
-    title: "Imagen",
+    title: "Código",
     dataIndex: "qr_image",
     key: "qr_image",
+    render: (_: any, image: any) => (
+      <Image src={image.qr_image} width={150} alt="QR CODE" />
+    ),
   },
   {
     title: "Bien de interés cultural",

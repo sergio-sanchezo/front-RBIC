@@ -12,8 +12,6 @@ const ProtectRoutes = (props: any) => {
     startChecking();
     if (!authenticated) {
       router.push("/login");
-    } else {
-      router.push("/bien_de_interes");
     }
   }, []);
   return loading && router.pathname !== "/login" ? <></> : <>{children}</>;
